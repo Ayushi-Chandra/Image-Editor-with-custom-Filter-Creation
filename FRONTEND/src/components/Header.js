@@ -1,10 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-
 const Header = () => {
   return (
-    
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       
       <div className="container-fluid">
@@ -43,7 +41,7 @@ const Header = () => {
             <li className="nav-item">
               <NavLink className="nav-link" to="/registerpage">Register</NavLink>
             </li>
-          
+            
           </ul>
           
         </div>
@@ -122,7 +120,8 @@ const Header = () => {
       </div>
       
     </nav>
-    
+
+
   )
 }
 
