@@ -1,0 +1,59 @@
+*{
+    transition-duration: 400ms;
+}
+
+:root {
+    --cont-height: 80vh;
+  }
+
+.editor{
+    height: var(--cont-height);
+}
+
+.editor-cont{
+    height: calc(100vh);
+    background: gainsboro;
+}
+
+.page-title{
+    text-align: center;
+    font-weight: 900;
+    font-size: 60px;
+    margin: 0;
+}
+
+.editor-toolbox{
+    height: var(--cont-height);
+    overflow: auto;
+}
+
+.editor-image{
+    height: calc(var(--cont-height) - 10vh);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.del-btn{
+    color: rgb(167, 167, 167);
+    background-color: white;
+    border-radius: 100%;
+    font-size: 30px;
+    cursor: pointer;
+}
+.del-btn:hover{
+    color: crimson;
+}
+
+.saved-filters{
+    height: var(--cont-height);
+    overflow: auto;
+}
+
+.drag-drop{
+    padding: 20px;
+}
+
+.radius-curve {
+    border-radius: 20px;
+}

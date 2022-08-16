@@ -40,6 +40,9 @@ const Header = () => {
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/registerpage">Register</NavLink>
+              </li>
+              <li className="nav-item">
+              <NavLink className="nav-link" to="/imageeditor">ImageEditor</NavLink>
             </li>
             
           </ul>

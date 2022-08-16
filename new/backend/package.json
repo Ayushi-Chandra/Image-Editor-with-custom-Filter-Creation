@@ -9,13 +9,13 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "react-socket-io": "^0.2.5"
+  },
   "scripts": {
     "start": "node index",
-  "dev": "nodemon index"
-},
-    
-  
+    "dev": "nodemon index"
+  },
   "author": "",
   "license": "ISC",
   "description": ""

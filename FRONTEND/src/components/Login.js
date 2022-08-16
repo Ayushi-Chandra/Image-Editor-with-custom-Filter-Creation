@@ -1,9 +1,53 @@
 import React from 'react'
 
+import Swal from "sweetalert2";
+
+
+import { useNavigate } from "react-router-dom";
+import { Formik } from 'formik';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const userSubmit = async (formdata) => {
+    console.log(formdata);
+
+    const res = await fetch("http://localhost:5000/user/authenticate", {
+      method: "POST",
+      body: JSON.stringify(formdata),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Login Successful",
+        text: "You are now logged in",
+      });
+      res.json().then((data) => {
+        console.log(data);
+        sessionStorage.setItem("user", JSON.stringify(data));
+        navigate("/imageeditor");
+      });
+    } else if (res.status === 400) {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Invalid username or password",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Something went wrong",
+      });
+    }
+  };
   return (
     <div>
+      
         <section className="vh-100">
   <div className="container py-5 h-100">
     <div className="row d-flex align-items-center justify-content-center h-100">
@@ -15,26 +59,36 @@ const Login = () => {
         />
       </div>
       <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
+        <Formik 
+        initialValues={{ email: "", password: "" }}
+                onSubmit={userSubmit}>
+                  {({ values, handleChange, handleSubmit }) => (
+
+        
+        <form onSubmit={handleSubmit}>
           {/* Email input */}
           <div className="form-outline mb-4">
             <input
+            value={values.email}
+            onChange={handleChange}
               type="email"
-              id="form1Example13"
+              id="email"
               className="form-control form-control-lg"
             />
-            <label className="form-label" htmlFor="form1Example13">
+            <label className="form-label" for="email">
               Email address
             </label>
           </div>
           {/* Password input */}
           <div className="form-outline mb-4">
             <input
+            value={values.password}
+            onChange={handleChange}
               type="password"
-              id="form1Example23"
+              id="password"
               className="form-control form-control-lg"
             />
-            <label className="form-label" htmlFor="form1Example23">
+            <label className="form-label" htmlFor="password">
               Password
             </label>
           </div>
@@ -81,13 +135,15 @@ const Login = () => {
             Continue with Twitter
           </a>
         </form>
+        )}
+        </Formik>
       </div>
     </div>
   </div>
 </section>
 
     </div>
-  )
-}
+  );
+};
 
 export default Login

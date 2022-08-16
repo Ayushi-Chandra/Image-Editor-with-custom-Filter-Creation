@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // importing user model
-const Model = require('../models/userModel');
+const Model = require('../models/filterModel');
 
 router.post('/add', (req, res) => {
     console.log(req.body);
@@ -48,6 +48,16 @@ router.get('/getbyemail/:email', (req, res) => {
 router.get('/getbyid/:id', (req, res) => {
     
     Model.findById(req.params.id)
+    .then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).json(err);
+    });
+});
+router.get('/getbyuser/:id', (req, res) => {
+    
+    Model.find({createdBy : req.params.id})
     .then((result) => {
         res.json(result);
     }).catch((err) => {

@@ -20,6 +20,7 @@ function App() {
         <Route element={<Login></Login>} path="loginpage" />
         <Route element={<Register></Register>}path="registerpage"/>
         <Route element={<ImageEditor></ImageEditor>}path="imageeditor"/>
+      
       </Routes>
       </BrowserRouter>
         </div>
