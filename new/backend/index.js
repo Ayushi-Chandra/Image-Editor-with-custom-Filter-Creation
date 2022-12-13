@@ -9,6 +9,8 @@ const app = express();
 const port = 5000;
 
 const userRouter = require('./routers/userRouter');
+const filterRouter = require('./routers/filterRouter');
+const utilRouter = require('./routers/util');
 
 
 //to allow react forntend to access the backend
@@ -17,6 +19,10 @@ app.use(express.json());
 
 //middleware
 app.use('/user', userRouter);
+app.use('/filter', filterRouter);
+app.use('/util', utilRouter);
+
+app.use(express.static('./static/uploads'))
 
 // creating a route or endpoint
 app.get( '/',(req,res)=>{

@@ -47,9 +47,12 @@ const Login = () => {
   };
   return (
     <div>
+      <section className="vh-100" style={{ backgroundColor: "#eee" }}>
       
-        <section className="vh-100">
-  <div className="container py-5 h-100">
+        
+  <div className="container  h-100  mt-100  pt-100px">
+  <div className="card text-black" style={{ borderRadius: 25 ,paddingTop:100}}>
+  <h1 className="text-center fw-bold mx-3 mb-0 text-muted">Login Page</h1>
     <div className="row d-flex align-items-center justify-content-center h-100">
       <div className="col-md-8 col-lg-7 col-xl-6">
         <img
@@ -59,6 +62,7 @@ const Login = () => {
         />
       </div>
       <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+       
         <Formik 
         initialValues={{ email: "", password: "" }}
                 onSubmit={userSubmit}>
@@ -67,7 +71,12 @@ const Login = () => {
         
         <form onSubmit={handleSubmit}>
           {/* Email input */}
-          <div className="form-outline mb-4">
+          <div className="form-outline mb-4 p-100">
+          <i className="fas fa-envelope fa-lg me-3 fa-fw" />
+           
+            <label className="form-label" htmlfor="email">
+              Email address
+            </label>
             <input
             value={values.email}
             onChange={handleChange}
@@ -75,12 +84,15 @@ const Login = () => {
               id="email"
               className="form-control form-control-lg"
             />
-            <label className="form-label" for="email">
-              Email address
-            </label>
           </div>
           {/* Password input */}
           <div className="form-outline mb-4">
+          <i className="fas fa-lock fa-lg me-3 fa-fw" />
+            
+            
+            <label className="form-label" htmlFor="password">
+              Password
+            </label>
             <input
             value={values.password}
             onChange={handleChange}
@@ -88,56 +100,19 @@ const Login = () => {
               id="password"
               className="form-control form-control-lg"
             />
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
           </div>
-          <div className="d-flex justify-content-around align-items-center mb-4">
-            {/* Checkbox */}
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                defaultValue=""
-                id="form1Example3"
-                defaultChecked=""
-              />
-              <label className="form-check-label" htmlFor="form1Example3">
-                {" "}
-                Remember me{" "}
-              </label>
-            </div>
-            <a href="#!">Forgot password?</a>
-          </div>
+          
           {/* Submit button */}
           <button type="submit" className="btn btn-primary btn-lg btn-block">
             Sign in
           </button>
-          <div className="divider d-flex align-items-center my-4">
-            <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-          </div>
-          <a
-            className="btn btn-primary btn-lg btn-block"
-            style={{ backgroundColor: "#3b5998" }}
-            href="#!"
-            role="button"
-          >
-            <i className="fab fa-facebook-f me-2" />
-            Continue with Facebook
-          </a>
-          <a
-            className="btn btn-primary btn-lg btn-block"
-            style={{ backgroundColor: "#55acee" }}
-            href="#!"
-            role="button"
-          >
-            <i className="fab fa-twitter me-2" />
-            Continue with Twitter
-          </a>
+          
         </form>
         )}
         </Formik>
       </div>
+      </div>
+      
     </div>
   </div>
 </section>

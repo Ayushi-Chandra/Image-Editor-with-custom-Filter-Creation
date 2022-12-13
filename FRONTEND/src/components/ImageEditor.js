@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react"
-import Swal from "sweetalert2"
-import DEFAULT_OPTIONS from "./DefaultOptions"
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import DEFAULT_OPTIONS from "./DefaultOptions";
+import Filters from "./Filters";
 // import Filters from "./Filters"
-import "./imageeditor.css"
+import "./imageeditor.css";
 
 const FilterSlider = ({ options, updateFilterOptions, index }) => {
-    return (
-      <div>
-      <div className="p-3 fw-bold radius-curve" style={{background: "#1a3847"}}>
+  return (
+    <div>
+      <div
+        className="p-3 fw-bold radius-curve"
+        style={{ background: "#1a3847" }}
+      >
         <label class="form-label text-white" for={options.property}>
           {options.name}
           {"   :   "}
@@ -15,7 +19,9 @@ const FilterSlider = ({ options, updateFilterOptions, index }) => {
         </label>
         <div class="range">
           <input
-            onChange={(e) => updateFilterOptions(index, parseInt(e.target.value))}
+            onChange={(e) =>
+              updateFilterOptions(index, parseInt(e.target.value))
+            }
             value={options.value}
             type="range"
             class="form-range"
@@ -26,49 +32,50 @@ const FilterSlider = ({ options, updateFilterOptions, index }) => {
           />
         </div>
       </div>
-        <hr />
-      </div>
-    )
-  }
+      <hr />
+    </div>
+  );
+};
 
 const ImageEditor = () => {
-
-    const [options, setOptions] = useState(DEFAULT_OPTIONS)
-  const [mainImg, setMainImg] = useState(sessionStorage.getItem('mainImg'))
-  const [filterName, setFilterName] = useState("")
-  const [filterArray, setFilterArray] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [options, setOptions] = useState(DEFAULT_OPTIONS);
+  const [mainImg, setMainImg] = useState(sessionStorage.getItem("mainImg"));
+  const [filterName, setFilterName] = useState("");
+  const [filterArray, setFilterArray] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let image = sessionStorage.getItem("mainImg")
+    let image = sessionStorage.getItem("mainImg");
     if (image) {
-      setMainImg(image)
+      setMainImg(image);
     }
 
-    document.body.addEventListener('drop', (e) => e.preventDefault())
-  }, [])
+    document.body.addEventListener("drop", (e) => e.preventDefault());
+  }, []);
 
   const updateFilters = (index, val) => {
-    let newOptions = [...options]
-    newOptions[index]["value"] = val
-    setOptions([...newOptions])
-  }
+    let newOptions = [...options];
+    newOptions[index]["value"] = val;
+    setOptions([...newOptions]);
+  };
 
-  const [currentUser, setCurrentUser] = useState(JSON.parse(sessionStorage.getItem("user")))
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(sessionStorage.getItem("user"))
+  );
 
   const getUserFilter = () => {
-    setLoading(true)
+    setLoading(true);
     fetch("http://localhost:5000/filter/getbyuser/" + currentUser._id)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        setFilterArray(data)
-        setLoading(false)
-      })
-  }
+        console.log(data);
+        setFilterArray(data);
+        setLoading(false);
+      });
+  };
 
   const saveCustomFilter = () => {
-    console.log(options)
+    console.log(options);
 
     fetch("http://localhost:5000/filter/add", {
       method: "POST",
@@ -83,72 +90,159 @@ const ImageEditor = () => {
         createdAt: new Date(),
       }),
     }).then((res) => {
-      console.log(res)
+      console.log(res);
       if (res.status === 200) {
-        getUserFilter()
+        getUserFilter();
         Swal.fire({
           icon: "success",
           title: "Success",
           text: "Filter saved successfully",
+        });
+      }
+    });
+  };
+
+  function getImageStyle() {
+    const filters = options.map((option) => {
+      return `${option.property}(${option.value}${option.unit})`;
+    });
+
+    // filters.push(`url(${mainImg})`);
+    // console.log({ filter: filters.join(" ") });
+
+    return { filter: filters.join(" "), backgroundImage: `url(${mainImg})` };
+  }
+
+  const uploadImage = (e) => {
+    const file = e.target.files[0]
+    const fd = new FormData()
+    fd.append("myfile", file)
+    fetch("http://localhost:5000/util/uploadfile", {
+      method: "POST",
+      body: fd,
+    }).then((res) => {
+      console.log(res.status)
+      if (res.status === 200) {
+        console.log("uploaded")
+        res.json().then((data) => {
+          console.log(data)
+          setMainImg(data.url)
+          sessionStorage.setItem("mainImg", data.url)
+
         })
       }
     })
   }
 
-  function getImageStyle() {
-    const filters = options.map((option) => {
-      return `${option.property}(${option.value}${option.unit})`
-    })
-
-    // filters.push(`url(${mainImg})`);
-    // console.log({ filter: filters.join(" ") });
-
-    return { filter: filters.join(" "), backgroundImage: `url(${mainImg})` }
-  }
-
   return (
-    
-      <div className="container-fluid">
-
-        <div className="row">
-
-            <div className="col-md-1">
-                <div className="card">
-                    <div className="card-header">
-                        <h2>Saved Filters</h2>
-                    </div>
-                    <div className="card-body">
-                    
-
-
-                    </div>
-                </div>
-                
+    <div className="container-fluid">
+      <h1 className="text-center fw-bold mx-3 mb-0 text-muted">Image Editor</h1>
+      <div className="row pt-5">
+        <div className="col-md-2">
+          <div className="card saved-filters">
+            <div className="card-header">
+              
             </div>
-
-            <div className="col-md-9">
-            <div className="card">
-                    <div className="card-body">
-                    
-
-                        
-                    </div>
-                </div>
-                
+            <div className="card-body" style={{ background: "#EEDD82" }}>
+              <h5 className="text-center fw-bold">Available Filters</h5>
+              <hr />
+              <Filters
+                  loading={loading}
+                  getUserFilter={getUserFilter}
+                  userid={currentUser._id}
+                  setOptions={setOptions}
+                  filterArray={filterArray}
+                  setFilterArray={setFilterArray}
+                />
             </div>
-            <div className="col-md-2">
-            <div className="card">
-                    <div className="card-body">
-                    
+          </div>
+        </div>
 
-                        
-                    </div>
-                </div>
-                
+        <div className="col-md">
+          <div className="card editor" style={{ background: "#EEDD82" }}>
+            <div className="card-body">
+              <label className="btn btn-primary" htmlFor="uploader"> <i class="fas fa-upload    "></i> Upload Image</label>
+              <input className="" hidden id="uploader" type="file" onChange={(e) => uploadImage(e)}    />
+              <div className="editor-image mt-2" style={getImageStyle()} />
             </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card editor-toolbox">
+            <div className="card-body" style={{ background: "#EEDD82" }}>
+              <div class="accordion" id="accordion-filter">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading-filter">
+                    <button
+                      class="accordion-button"
+                      type="button"
+                      data-mdb-toggle="collapse"
+                      data-mdb-target="#collapse-filter"
+                      aria-expanded="true"
+                      aria-controls="collapse-filter"
+                    >
+                      Color Filters
+                    </button>
+                  </h2>
+                  <div
+                    id="collapse-filter"
+                    class="accordion-collapse collapse show"
+                    aria-labelledby="heading-filter"
+                    data-mdb-parent="#accordion-filter"
+                  >
+                    <div class="">
+                      {options.map((option, index) => (
+                        <FilterSlider
+                          options={option}
+                          updateFilterOptions={updateFilters}
+                          index={index}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading-save-filter">
+                    <button
+                      class="accordion-button"
+                      type="button"
+                      data-mdb-toggle="collapse"
+                      data-mdb-target="#collapse-save-filter"
+                      aria-expanded="true"
+                      aria-controls="collapse-save-filter"
+                    >
+                      Save Filters
+                    </button>
+                  </h2>
+                  <div
+                    id="collapse-save-filter"
+                    class="accordion-collapse collapse show"
+                    aria-labelledby="heading-save-filter"
+                    data-mdb-parent="#accordion-filter"
+                  >
+                    <div class="accordion-body">
+                      <div className="input-group">
+                        <input
+                          className="form-control"
+                          onChange={(e) => setFilterName(e.target.value)}
+                        />
+
+                        <button
+                          className="btn btn-success input-group-append"
+                          onClick={saveCustomFilter}
+                        >
+                          <i class="fas fa-save    "></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    
+    </div>
   );
 };
 
